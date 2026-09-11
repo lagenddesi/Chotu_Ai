@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:background="@color/bg_dark" android:layout_height="match_parent" android:layout_width="match_parent" android:orientation="vertical" android:padding="20dp" xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Header Section -->
+    <LinearLayout android:gravity="center_vertical" android:layout_height="wrap_content" android:layout_width="match_parent" android:orientation="horizontal">
+
+        <LinearLayout android:layout_height="wrap_content" android:layout_weight="1" android:layout_width="0dp" android:orientation="vertical">
+            
+            <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:letterSpacing="0.1" android:text="CHOTU AI ASSISTANT" android:textColor="@color/accent_blue" android:textSize="12sp" android:textStyle="bold"/>
+
+            <TextView android:layout_height="wrap_content" android:layout_marginTop="2dp" android:layout_width="wrap_content" android:text="Pranam Ustad Ji!" android:textColor="@color/white" android:textSize="22sp" android:textStyle="bold"/>
+        </LinearLayout>
+
+        <TextView android:id="@+id/tvStatusBadge" android:layout_height="wrap_content" android:layout_width="wrap_content" android:paddingBottom="4dp" android:paddingEnd="10dp" android:paddingStart="10dp" android:paddingTop="4dp" android:text="ACTIVE" android:textColor="@color/accent_green" android:textSize="12sp" android:textStyle="bold"/>
+    </LinearLayout>
+
+    <!-- Main Visual Status Box -->
+    <LinearLayout android:background="@color/card_dark" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:layout_width="match_parent" android:orientation="vertical" android:padding="16dp">
+
+        <TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="System Status &amp; Permissions" android:textColor="@color/white" android:textSize="16sp" android:textStyle="bold"/>
+
+        <TextView android:id="@+id/tvAccessibilityStatus" android:layout_height="wrap_content" android:layout_marginTop="10dp" android:layout_width="wrap_content" android:text="Accessibility Control: Disabled (Click to Enable)" android:textColor="@color/text_subtle" android:textSize="14sp"/>
+
+        <Button android:backgroundTint="@color/accent_blue" android:id="@+id/btnEnableAccessibility" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:layout_width="match_parent" android:text="Enable Screen Reader &amp; Auto Action"/>
+    </LinearLayout>
+
+    <!-- Console Log Display -->
+    <TextView android:layout_height="wrap_content" android:layout_marginTop="20dp" android:layout_width="wrap_content" android:text="Real-Time Speech &amp; Action Stream" android:textColor="@color/white" android:textSize="16sp" android:textStyle="bold"/>
+
+    <ScrollView android:background="@color/card_dark" android:layout_height="0dp" android:layout_marginTop="10dp" android:layout_weight="1" android:layout_width="match_parent" android:padding="12dp">
+
+        <TextView android:fontFamily="monospace" android:id="@+id/tvConsoleLogs" android:layout_height="wrap_content" android:layout_width="match_parent" android:text="Chotu AI Core Initialized...\nListening for 'Hey Chotu' or manual commands..." android:textColor="@color/text_subtle" android:textSize="13sp"/>
+    </ScrollView>
+
+    <!-- Manual Test Action -->
+    <Button android:backgroundTint="@color/accent_green" android:id="@+id/btnTestVoice" android:layout_height="wrap_content" android:layout_marginTop="12dp" android:layout_width="match_parent" android:text="Speak To Chotu (Test Speech)"/>
+
+</LinearLayout>
