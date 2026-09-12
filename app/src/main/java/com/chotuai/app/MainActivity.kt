@@ -4,26 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoAwesome
-import androidx.compose.material.icons.filled.Code
-import androidx.compose.material.icons.filled.RocketLaunch
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.SmartToy
+import androidx.compose.material.icons.filled.User
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.chotuai.app.ui.theme.*
+import com.chotuai.app.ui.theme.ChotuAITheme
+
+data class ChatMessage(
+    val text: String,
+    val isUser: Boolean,
+    val timestamp: String
+)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +35,125 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ChotuHomeScreen()
+                    ChatScreen()
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ChatScreen() {
+    var inputText by remember { mutableStateOf("") }
+    val messages = remember {
+        mutableStateListOf(
+            ChatMessage(
+                text = "Namaste! Main ChotuAI hoon. Main aapki kya madad kar sakta hoon?",
+                isUser = false,
+                timestamp = "10:30 AM"
+            )
+        )
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = Icons.Default.SmartToy,
+                            contentDescription = "AI Icon",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(28.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "ChotuAI",
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(messages) { message ->
+                    ChatMessageItem(message = message)
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(
+                    value = inputText,
+                    onValueChange = { inputText = it },
+                    placeholder = { Text("Type a message...") },
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(24.dp)),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.surface
+                    ),
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                IconButton(
+                    onClick = {
+                        if (inputText.isNotBlank()) {
+                            messages.add(
+                                ChatMessage(
+                                    text = inputText,
+                                    isUser = true,
+                                    timestamp = "Just now"
+                                )
+                            )
+                            val userQuery = inputText
+                            inputText = ""
+                            
+                            messages.add(
+                                ChatMessage(
+                                    text = "Aapne puchha: '$userQuery'. Main abhi test mode me responsive hoon!",
+                                    isUser = false,
+                                    timestamp = "Just now"
+                                )
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(24.dp)
+                        )
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Send,
+                        contentDescription = "Send",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
                 }
             }
         }
@@ -42,151 +161,36 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ChotuHomeScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        // Top Header
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.headlineLarge,
-                color = TextPrimary,
-                fontWeight = FontWeight.Bold
-            )
-            Surface(
-                shape = RoundedCornerShape(20.dp),
-                color = PrimaryGlow.copy(alpha = 0.2f),
-                border = androidx.compose.foundation.BorderStroke(1.dp, PrimaryGlow)
-            ) {
-                Text(
-                    text = "v1.0.0",
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-                    color = AccentCyan,
-                    fontSize = 12.sp
-                )
-            }
-        }
+fun ChatMessageItem(message: ChatMessage) {
+    val alignment = if (message.isUser) Alignment.End else Alignment.Start
+    val containerColor = if (message.isUser) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
 
-        // Hero Card
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = alignment
+    ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(24.dp))
+                .widthIn(max = 280.dp)
                 .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            DarkSurfaceVariant,
-                            DarkSurface
-                        )
+                    color = containerColor,
+                    shape = RoundedCornerShape(
+                        topStart = 16.dp,
+                        topEnd = 16.dp,
+                        bottomStart = if (message.isUser) 16.dp else 4.dp,
+                        bottomEnd = if (message.isUser) 4.dp else 16.dp
                     )
                 )
-                .border(1.dp, BorderGlass, RoundedCornerShape(24.dp))
-                .padding(24.dp)
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    imageVector = Icons.Default.AutoAwesome,
-                    contentDescription = "AI Glow",
-                    tint = AccentCyan,
-                    modifier = Modifier.size(48.dp)
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(R.string.welcome_title),
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = TextPrimary,
-                    textAlign = TextAlign.Center
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = stringResource(R.string.welcome_subtitle),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = TextSecondary,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-
-        // Feature Grid Options
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            FeatureTile(
-                icon = Icons.Default.Code,
-                title = "Smart Architecture",
-                subtitle = "Modern Jetpack Compose Clean Code"
-            )
-            FeatureTile(
-                icon = Icons.Default.RocketLaunch,
-                title = "GitHub CI/CD Ready",
-                subtitle = "Automated Build & Release Pipeline"
-            )
-        }
-
-        // Action Button
-        Button(
-            onClick = { /* Launch action */ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = PrimaryGlow
-            )
+                .padding(12.dp)
         ) {
             Text(
-                text = "Get Started",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = TextPrimary
-            )
-        }
-    }
-}
-
-@Composable
-fun FeatureTile(icon: ImageVector, title: String, subtitle: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(DarkSurfaceVariant.copy(alpha = 0.6f))
-            .border(1.dp, BorderGlass, RoundedCornerShape(16.dp))
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = PrimaryGlow,
-            modifier = Modifier.size(28.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Column {
-            Text(
-                text = title,
-                color = TextPrimary,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
-            )
-            Text(
-                text = subtitle,
-                color = TextSecondary,
-                fontSize = 13.sp
+                text = message.text,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
