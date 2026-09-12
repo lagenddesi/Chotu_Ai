@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Chotu AI</string>
-    <string name="accessibility_service_label">Chotu AI Screen Control Service</string>
-    <string name="accessibility_service_description">Allows Chotu AI to read screen content, UI buttons, and auto-click to fulfill user voice instructions for Ustad Ji.</string>
+    <string name="app_name">ChotuAI</string>
+    <string name="welcome_title">Welcome to ChotuAI</string>
+    <string name="welcome_subtitle">Your Intelligent Mobile Development Assistant</string>
 </resources>
