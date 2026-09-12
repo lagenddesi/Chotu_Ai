@@ -1,7 +1,4 @@
 <resources>
-    <string name="app_name">ChotuAI</string>
-    <string name="welcome_title">Welcome to ChotuAI</string>
-    <string name="welcome_subtitle">Your intelligent AI personal assistant</string>
-    <string name="prompt_placeholder">Type a message...</string>
-    <string name="send_button">Send</string>
+    <string name="app_name">Chotu AI</string>
+    <string name="welcome_message">Welcome to Chotu AI</string>
 </resources>
